@@ -1,0 +1,48 @@
+﻿using System;
+using Android.App;
+using Android.Content;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Android.OS;
+using PinView.Droid;
+using PinView.Abstractions;
+using System.Threading.Tasks;
+
+namespace Sample.Droid
+{
+    [Activity(Label = "Sample.Droid", MainLauncher = true, Icon = "@drawable/icon", Theme = "@style/AppTheme")]
+    public class MainActivity : Activity
+    {
+        private PinWidget _pinView;
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            SetContentView(Resource.Layout.Main);
+
+            _pinView = FindViewById<PinWidget>(Resource.Id.MyButton);
+            _pinView.PinFinished += PinComplete;
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            Task.Run(async () =>
+            {
+                await Task.Delay(1000);
+                _pinView.RequestFocus();
+                _pinView.DigitCount = 3;
+            });
+        }
+
+        private void PinComplete(object sender, PinFinishedEventArgs e)
+        {
+            Toast.MakeText(this, e.Pin, ToastLength.Long).Show();
+        }
+    }
+}
+

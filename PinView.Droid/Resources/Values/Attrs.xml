@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="PinView">
+    <!-- The number of digits in the pin -->
+    <attr name="digitCount" format="integer" />
+    <!-- Digit dimensions, default 50dp x 50dp -->
+    <attr name="digitWidth" format="dimension" />
+    <attr name="digitHeight" format="dimension" />
+    <!-- Spacing between the pin boxes, default 20dp -->
+    <attr name="digitSpacing" format="dimension" />
+    <!-- Digit background, colour or drawable -->
+    <attr name="digitBackgroundColor" format="color" />
+    <!-- Digit border, color -->
+    <attr name="borderColor" format="color" />
+    <!-- Font size to use for the mask text, default 15sp -->
+    <attr name="textSize" format="dimension" />
+    <!-- Colour of the mask text, defaults to theme textColorPrimary -->
+    <attr name="textColor" format="color" />
+    <!-- Accent color, defaults to theme colorAccent -->
+    <attr name="accentColor" format="color" />
+    <!-- Accent width, default 2dp -->
+    <attr name="accentHeight" format="dimension" />
+    <!-- onPinFinished listener, default to empty -->
+    <attr name="onPinFinished" format="string" />
+  </declare-styleable>
+</resources>
