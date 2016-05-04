@@ -4,10 +4,12 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <com.ameaney.PinView
+    <com.ameaney.PinWidget
         android:id="@+id/MyButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        app:onPinCompleted="PinEntered"
         android:paddingTop="5dp"
-        app:digitCount="6" />
+        app:digitCount="2"
+        app:textColor="@color/primary" />
 </LinearLayout>

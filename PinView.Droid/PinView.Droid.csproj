@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DigitView.cs" />
+    <Compile Include="IOnPinCompletedListener.cs" />
     <Compile Include="PinSavedState.cs" />
     <Compile Include="PinWidget.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -62,7 +63,9 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Values\Attrs.xml" />
+    <AndroidResource Include="Resources\Values\Attrs.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PinView.Abstractions\PinView.Abstractions.csproj">

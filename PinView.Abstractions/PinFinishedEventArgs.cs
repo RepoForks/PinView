@@ -2,14 +2,14 @@
 
 namespace PinView.Abstractions
 {
-    public class PinFinishedEventArgs : EventArgs
+    public class PinCompletedEventArgs : EventArgs
     {
         public string Pin
         {
             get;
         }
 
-        public PinFinishedEventArgs(string pin)
+        public PinCompletedEventArgs(string pin)
         {
             if (string.IsNullOrEmpty(pin))
             {

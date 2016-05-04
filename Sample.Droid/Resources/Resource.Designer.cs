@@ -34,7 +34,7 @@ namespace Sample.Droid
 			global::PinView.Droid.Resource.Attribute.digitHeight = global::Sample.Droid.Resource.Attribute.digitHeight;
 			global::PinView.Droid.Resource.Attribute.digitSpacing = global::Sample.Droid.Resource.Attribute.digitSpacing;
 			global::PinView.Droid.Resource.Attribute.digitWidth = global::Sample.Droid.Resource.Attribute.digitWidth;
-			global::PinView.Droid.Resource.Attribute.onPinFinished = global::Sample.Droid.Resource.Attribute.onPinFinished;
+			global::PinView.Droid.Resource.Attribute.onPinCompleted = global::Sample.Droid.Resource.Attribute.onPinCompleted;
 			global::PinView.Droid.Resource.Attribute.textColor = global::Sample.Droid.Resource.Attribute.textColor;
 			global::PinView.Droid.Resource.Attribute.textSize = global::Sample.Droid.Resource.Attribute.textSize;
 			global::PinView.Droid.Resource.String.ApplicationName = global::Sample.Droid.Resource.String.ApplicationName;
@@ -48,7 +48,7 @@ namespace Sample.Droid
 			global::PinView.Droid.Resource.Styleable.PinView_digitHeight = global::Sample.Droid.Resource.Styleable.PinView_digitHeight;
 			global::PinView.Droid.Resource.Styleable.PinView_digitSpacing = global::Sample.Droid.Resource.Styleable.PinView_digitSpacing;
 			global::PinView.Droid.Resource.Styleable.PinView_digitWidth = global::Sample.Droid.Resource.Styleable.PinView_digitWidth;
-			global::PinView.Droid.Resource.Styleable.PinView_onPinFinished = global::Sample.Droid.Resource.Styleable.PinView_onPinFinished;
+			global::PinView.Droid.Resource.Styleable.PinView_onPinCompleted = global::Sample.Droid.Resource.Styleable.PinView_onPinCompleted;
 			global::PinView.Droid.Resource.Styleable.PinView_textColor = global::Sample.Droid.Resource.Styleable.PinView_textColor;
 			global::PinView.Droid.Resource.Styleable.PinView_textSize = global::Sample.Droid.Resource.Styleable.PinView_textSize;
 		}
@@ -514,7 +514,7 @@ namespace Sample.Droid
 			public const int navigationMode = 2130771972;
 			
 			// aapt resource value: 0x7f0100db
-			public const int onPinFinished = 2130772187;
+			public const int onPinCompleted = 2130772187;
 			
 			// aapt resource value: 0x7f0100a7
 			public const int overlapAnchor = 2130772135;
@@ -3966,7 +3966,7 @@ namespace Sample.Droid
 			public const int PinView_digitWidth = 1;
 			
 			// aapt resource value: 10
-			public const int PinView_onPinFinished = 10;
+			public const int PinView_onPinCompleted = 10;
 			
 			// aapt resource value: 7
 			public const int PinView_textColor = 7;

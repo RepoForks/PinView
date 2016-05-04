@@ -16,6 +16,11 @@ namespace Sample.Droid
     {
         private PinWidget _pinView;
 
+        public void PinEntered(string pin)
+        {
+            Toast.MakeText(this, pin, ToastLength.Long).Show();
+        }
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -24,24 +29,19 @@ namespace Sample.Droid
             SetContentView(Resource.Layout.Main);
 
             _pinView = FindViewById<PinWidget>(Resource.Id.MyButton);
-            _pinView.PinFinished += PinComplete;
+            //_pinView.PinCompleted += PinComplete;
         }
 
         protected override void OnResume()
         {
             base.OnResume();
-
-            Task.Run(async () =>
-            {
-                await Task.Delay(1000);
-                _pinView.RequestFocus();
-                _pinView.DigitCount = 3;
-            });
+            _pinView.RequestFocus();
         }
 
-        private void PinComplete(object sender, PinFinishedEventArgs e)
+        private void PinComplete(object sender, PinCompletedEventArgs e)
         {
             Toast.MakeText(this, e.Pin, ToastLength.Long).Show();
+            _pinView.DigitCount = 4;
         }
     }
 }

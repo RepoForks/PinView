@@ -21,6 +21,6 @@
     <!-- Accent width, default 2dp -->
     <attr name="accentHeight" format="dimension" />
     <!-- onPinFinished listener, default to empty -->
-    <attr name="onPinFinished" format="string" />
+    <attr name="onPinCompleted" format="string" />
   </declare-styleable>
 </resources>

@@ -14,6 +14,7 @@ using PinView.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 
@@ -84,7 +85,13 @@ namespace PinView.Droid
         }
         #endregion
 
-        public event EventHandler<PinFinishedEventArgs> PinFinished;
+        public event EventHandler<PinCompletedEventArgs> PinCompleted;
+
+        public IOnPinCompletedListener PinListener
+        {
+            get;
+            set;
+        }
 
         private const string MASK = "•";
         private const double THRESHOLD = 30;
@@ -104,6 +111,9 @@ namespace PinView.Droid
             ScrollBarStyle = ScrollbarStyles.OutsideInset;
 
             TypedArray array = context.ObtainStyledAttributes(attribs, Resource.Styleable.PinView);
+
+            var method = array.GetString(Resource.Styleable.PinView_onPinCompleted);
+            PinListener = new PrivatePinListener(method, this);
 
             DigitCount = (uint)array.GetInt(Resource.Styleable.PinView_digitCount, PinDefaults.DIGIT_COUNT);
 
@@ -332,8 +342,9 @@ namespace PinView.Droid
             if (length == DigitCount)
             {
                 // Finished
-                var handler = PinFinished;
-                handler?.Invoke(this, new PinFinishedEventArgs(_pinInputField.Text));
+                var handler = PinCompleted;
+                handler?.Invoke(this, new PinCompletedEventArgs(_pinInputField.Text));
+                PinListener?.PinEntered(_pinInputField.Text);
                 _pinInputField.ClearFocus();
                 HideKeyboard();
             }
@@ -363,5 +374,28 @@ namespace PinView.Droid
             ShowKeyboard();
         }
         #endregion
+    }
+
+    internal class PrivatePinListener : IOnPinCompletedListener
+    {
+        private string _pinFinishedMethod;
+        private View _view;
+
+        public PrivatePinListener(string pinFinishedMethod, PinWidget view)
+        {
+            this._pinFinishedMethod = pinFinishedMethod;
+            this._view = view;
+        }
+
+        public void PinEntered(string pin)
+        {
+            if (string.IsNullOrWhiteSpace(_pinFinishedMethod))
+            {
+                return;
+            }
+
+            var method = _view.Context.GetType().GetMethod(_pinFinishedMethod, BindingFlags.Public | BindingFlags.Instance);
+            method.Invoke(_view.Context, new object[] { pin });
+        }
     }
 }

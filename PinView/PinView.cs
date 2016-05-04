@@ -87,7 +87,7 @@ namespace PinView
         /// <summary>
         /// Fires when pin is completely input.
         /// </summary>
-        public EventHandler<PinFinishedEventArgs> PinCompleted;
+        public EventHandler<PinCompletedEventArgs> PinCompleted;
 
         public PinView()
         {
@@ -117,7 +117,7 @@ namespace PinView
                     }
                 }
 
-                handler?.Invoke(this, new PinFinishedEventArgs(pin));
+                handler?.Invoke(this, new PinCompletedEventArgs(pin));
             }
         }
     }

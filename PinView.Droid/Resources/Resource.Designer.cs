@@ -52,7 +52,7 @@ namespace PinView.Droid
 			public static int digitWidth = 2130771969;
 			
 			// aapt resource value: 0x7f01000a
-			public static int onPinFinished = 2130771978;
+			public static int onPinCompleted = 2130771978;
 			
 			// aapt resource value: 0x7f010007
 			public static int textColor = 2130771975;
@@ -130,7 +130,7 @@ namespace PinView.Droid
 			public static int PinView_digitWidth = 1;
 			
 			// aapt resource value: 10
-			public static int PinView_onPinFinished = 10;
+			public static int PinView_onPinCompleted = 10;
 			
 			// aapt resource value: 7
 			public static int PinView_textColor = 7;
