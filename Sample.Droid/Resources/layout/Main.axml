@@ -7,7 +7,7 @@
     <com.ameaney.PinWidget
         android:id="@+id/MyButton"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         app:onPinCompleted="PinEntered"
         android:paddingTop="5dp"
         app:digitCount="2"

@@ -16,72 +16,152 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-
+using System.Threading.Tasks;
 
 namespace PinView.Droid
 {
-    [Register("com.ameaney." + nameof(PinView))]
+    [Register("com.ameaney." + nameof(PinWidget))]
     public class PinWidget : HorizontalScrollView
     {
         #region Properties
+        private uint _digitCount;
         public uint DigitCount
         {
-            get;
-            set;
+            get
+            {
+                return _digitCount;
+            }
+            set
+            {
+                _digitCount = value;
+                LoadViews();
+            }
         }
 
+        private int _accentHeight;
         public int AccentHeight
         {
-            get;
-            set;
+            get
+            {
+                return _accentHeight;
+            }
+            set
+            {
+                _accentHeight = value;
+                LoadViews();
+            }
         }
 
+        private int _digitWidth;
         public int DigitWidth
         {
-            get;
-            set;
+            get
+            {
+                return _digitWidth;
+            }
+            set
+            {
+                _digitWidth = value;
+                LoadViews();
+            }
         }
 
+        private int _digitHeight;
         public int DigitHeight
         {
-            get;
-            set;
+            get
+            {
+                return _digitHeight;
+            }
+            set
+            {
+                _digitHeight = value;
+                LoadViews();
+            }
         }
 
+        private int _digitSpacing;
         public int DigitSpacing
         {
-            get;
-            set;
+            get
+            {
+                return _digitSpacing;
+            }
+            set
+            {
+                _digitSpacing = value;
+                LoadViews();
+            }
         }
 
+        private int _textSize;
         public int TextSize
         {
-            get;
-            set;
+            get
+            {
+                return _textSize;
+            }
+            set
+            {
+                _textSize = value;
+                LoadViews();
+            }
         }
 
+        private Color _digitBorderColor;
         public Color DigitBorderColor
         {
-            get;
-            set;
+            get
+            {
+                return _digitBorderColor;
+            }
+            set
+            {
+                _digitBorderColor = value;
+                LoadViews();
+            }
         }
 
+        private Color _digitBackgroundColor;
         public Color DigitBackgroundColor
         {
-            get;
-            set;
+            get
+            {
+                return _digitBackgroundColor;
+            }
+            set
+            {
+                _digitBackgroundColor = value;
+                LoadViews();
+            }
         }
 
+        private Color _accentColor;
         public Color AccentColor
         {
-            get;
-            set;
+            get
+            {
+                return _accentColor;
+            }
+            set
+            {
+                _accentColor = value;
+                LoadViews();
+            }
         }
 
+        private Color _textColor;
         public Color TextColor
         {
-            get;
-            set;
+            get
+            {
+                return _textColor;
+            }
+            set
+            {
+                _textColor = value;
+                LoadViews();
+            }
         }
         #endregion
 
@@ -101,12 +181,30 @@ namespace PinView.Droid
 
         private TouchPoint _lastPoint = new TouchPoint(-1, -1);
 
+        private bool _shouldRedraw = true;
+        private bool ShouldRedraw
+        {
+            get
+            {
+                return _shouldRedraw;
+            }
+            set
+            {
+                _shouldRedraw = value;
+                if (value)
+                {
+                    LoadViews();
+                }
+            }
+        }
+
         public PinWidget(Context context) : this(context, null) { }
 
         public PinWidget(Context context, IAttributeSet attribs) : this(context, attribs, 0) { }
 
         public PinWidget(Context context, IAttributeSet attribs, int defStyleAttr) : base(context, attribs, defStyleAttr)
         {
+            ShouldRedraw = false;
             this.FillViewport = true;
             ScrollBarStyle = ScrollbarStyles.OutsideInset;
 
@@ -149,7 +247,15 @@ namespace PinView.Droid
 
             array.Recycle();
 
-            LoadViews();
+            _mainLayout = new LinearLayout(Context);
+            _pinInputField = new EditText(Context);
+
+            var container = new FrameLayout(Context);
+            container.AddView(_mainLayout);
+            container.AddView(_pinInputField);
+            this.AddView(container);
+
+            ShouldRedraw = true;
         }
 
         public override bool OnTouchEvent(MotionEvent e)
@@ -188,15 +294,20 @@ namespace PinView.Droid
         {
             var initState = base.OnSaveInstanceState();
             var state = new PinSavedState(initState, _pinInputField.Text);
+            state.Save(this);
             return state;
         }
 
         protected override void OnRestoreInstanceState(IParcelable state)
         {
+            ShouldRedraw = false;
             var pinState = (PinSavedState)state;
             base.OnRestoreInstanceState(pinState.SuperState);
             _pinInputField.Text = pinState.Pin;
             _pinInputField.SetSelection(_pinInputField.Text.Length);
+            pinState.Restore(this);
+            ShouldRedraw = true;
+
             CenterSelectedDigit();
         }
 
@@ -222,17 +333,20 @@ namespace PinView.Droid
 
         private void LoadViews()
         {
-            this.RemoveAllViews();
+            if (!ShouldRedraw)
+            {
+                return;
+            }
 
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent);
-            layoutParams.Gravity = GravityFlags.Center;
+            var pin = _pinInputField.Text;
 
-            _mainLayout = new LinearLayout(Context);
-            _mainLayout.LayoutParameters = layoutParams;
+            //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent);
+            //layoutParams.Gravity = GravityFlags.Center;
+
+            _mainLayout.RemoveAllViews();
+            //_mainLayout.LayoutParameters = layoutParams;
             _mainLayout.SetGravity(GravityFlags.Center);
             _mainLayout.Orientation = Android.Widget.Orientation.Horizontal;
-
-            this.AddView(_mainLayout);
 
             LinearLayout.LayoutParams digitParams = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
             digitParams.SetMargins(DigitSpacing / 2, 0, DigitSpacing / 2, 0);
@@ -252,10 +366,18 @@ namespace PinView.Droid
                 digitView.TextSize = TextSize;
                 digitView.Gravity = GravityFlags.Center;
 
+                if (pin.Length > i)
+                {
+                    digitView.Text = MASK;
+                }
+                else if (pin.Length == i)
+                {
+                    digitView.Selected = true;
+                }
+
                 _mainLayout.AddView(digitView);
             }
 
-            _pinInputField = new EditText(Context);
             _pinInputField.TextSize = 0;
             _pinInputField.SetBackgroundColor(Color.Transparent);
             _pinInputField.SetTextColor(Color.Transparent);
@@ -270,14 +392,12 @@ namespace PinView.Droid
 
             _pinInputField.TextChanged -= PinChanging;
             _pinInputField.TextChanged += PinChanging;
-
-            _mainLayout.AddView(_pinInputField);
         }
 
         private void CenterSelectedDigit()
         {
             DigitView selected = null;
-            for (int i = 0; i < _mainLayout.ChildCount - 1; i++)
+            for (int i = 0; i < DigitCount; i++)
             {
                 selected = (DigitView)_mainLayout.GetChildAt(i);
                 if (selected.Selected)
@@ -295,8 +415,9 @@ namespace PinView.Droid
         }
 
         #region Keyboard Methods
-        private void ShowKeyboard()
+        private async void ShowKeyboard()
         {
+            await Task.Delay(50);
             InputMethodManager inputMethodManager = (InputMethodManager)Context.GetSystemService(Context.InputMethodService);
             inputMethodManager.ShowSoftInput(_pinInputField, 0);
         }

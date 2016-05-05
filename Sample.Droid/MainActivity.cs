@@ -19,6 +19,7 @@ namespace Sample.Droid
         public void PinEntered(string pin)
         {
             Toast.MakeText(this, pin, ToastLength.Long).Show();
+            _pinView.DigitCount = 4;
         }
 
         protected override void OnCreate(Bundle bundle)
